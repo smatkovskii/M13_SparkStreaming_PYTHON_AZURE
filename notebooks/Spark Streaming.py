@@ -18,11 +18,7 @@ checkpointPath = f'/tmp/{username}/_checkpoint/m13sparkstreaming'
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Execute this code to copy the data to the destination container. Alternatively, use the local Spark app to incrementally load the data.
-
-# COMMAND ----------
-
+# DBTITLE 1,Copy the data to the destination container
 (spark.read.parquet(f'abfss://{sourceDataContainer}@{sourceStorageAccount}.dfs.core.windows.net/hotel-weather')
     .write.partitionBy('year', 'month', 'day')
     .parquet(f'abfss://{destDataContainer}@{destStorageAccount}.dfs.core.windows.net/hotel-weather'))
@@ -33,7 +29,7 @@ checkpointPath = f'/tmp/{username}/_checkpoint/m13sparkstreaming'
 import pyspark.sql.functions as F
 
 
-spark.sql('DROP TABLE IF EXISTS city_stats_table')
+spark.sql('DROP TABLE IF EXISTS city_stats')
 dbutils.fs.rm(checkpointPath, True)
 
 (spark.readStream
@@ -72,7 +68,7 @@ biggestCities = spark.sql('''
         select city, any_value(wthr_date) wthr_date, hotels_in_city,
         any_value(min_tmpr_c) min_tmpr_c, any_value(max_tmpr_c) max_tmpr_c, any_value(avg_tmpr_c) avg_tmpr_c,
         row_number() over (partition by city order by hotels_in_city desc) rn
-        from city_stats_table
+        from city_stats
         group by city, hotels_in_city
     )
     where rn = 1

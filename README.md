@@ -12,11 +12,6 @@
 2. [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt)
 3. [Databricks CLI](https://learn.microsoft.com/en-us/azure/databricks/dev-tools/cli/databricks-cli)
 
-## For launching the local Spark app (optional)
-
-1. Python >= 3.8
-2. `pip`
-
 # Running the notebook
 
 1. Create the infrastructure 
@@ -128,18 +123,11 @@
 
     - Press "Run all"
 
-# [Optional] Running the local Spark app to incrementally copy the dataset to destination container
+6.1. Display aggregations table:
+    ![](docs/assets/db_notebook_aggr_table.png)
 
-1. Install project dependencies:
-    ```sh
-    pip install -r requirements.txt
-    ```
+6.2. Visualize top-10 cities dynamically
+    ![](docs/assets/db_notebook_dynamic_visualization.png)
 
-2. Set env variables
-    - Open `spark.env` file and set values for the variables inside
-    - Save the file
-
-2. Run the program:
-    ```
-    env $(cat spark.env | xargs) python3 src/main/python/incremental_loader.py
-    ```
+6.3. Visualize snapshot of top-10 distinct cities
+    ![](docs/assets/db_notebook_static_visualization.png)
